@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.local.taskboard</groupId>
+    <artifactId>taskboard-platform</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>taskboard-platform</name>
+    <description>Taskboard microservices platform</description>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+
+    <!-- Usiamo il parent di Spring Boot per gestire versioni dipendenze -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.4</version> <!-- o l'ultima stabile che usi -->
+        <relativePath/> <!-- risolvi dal repository centrale -->
+    </parent>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- qui potresti mettere BOM Spring Cloud se in futuro usiamo Gateway/Eureka -->
+            <!-- per ora lasciamo vuoto -->
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>auth-service</module>
+        <module>project-service</module>
+        <module>analytics-service</module>
+        <module>gateway-service</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
