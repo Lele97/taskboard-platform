@@ -1,0 +1,16 @@
+com\local\taskboard\configuration\AuthUserClient$UserInfo.class
+com\local\taskboard\controller\BoardController.class
+com\local\taskboard\domain\Board$BoardBuilder.class
+com\local\taskboard\controller\CardController.class
+com\local\taskboard\repository\BoardRepository.class
+com\local\taskboard\service\CardService.class
+com\local\taskboard\domain\Board.class
+com\local\taskboard\ProjectServiceApplication.class
+com\local\taskboard\configuration\JwtAuthenticationFilter.class
+com\local\taskboard\configuration\AuthUserClient.class
+com\local\taskboard\domain\Card$CardBuilder.class
+com\local\taskboard\domain\Card.class
+com\local\taskboard\service\JwtService.class
+com\local\taskboard\configuration\WebClientConfig.class
+com\local\taskboard\service\BoardService.class
+com\local\taskboard\repository\CardRepository.class

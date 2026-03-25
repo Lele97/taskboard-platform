@@ -1,0 +1,14 @@
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\configuration\AuthUserClient.java
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\configuration\JwtAuthenticationFilter.java
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\configuration\SecurityConfig.java
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\configuration\WebClientConfig.java
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\controller\BoardController.java
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\controller\CardController.java
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\domain\Board.java
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\domain\Card.java
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\ProjectServiceApplication.java
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\repository\BoardRepository.java
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\repository\CardRepository.java
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\service\BoardService.java
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\service\CardService.java
+C:\Users\gabri\IdeaProjects\taskboard-platform\project-service\src\main\java\com\local\taskboard\service\JwtService.java

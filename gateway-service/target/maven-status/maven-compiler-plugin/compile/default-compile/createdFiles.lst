@@ -1,0 +1,4 @@
+com\local\taskboard\controller\AuthGatewayController.class
+com\local\taskboard\GatewayServiceApplication.class
+com\local\taskboard\configuration\WebClientConfig.class
+com\local\taskboard\controller\ProjectGatewayController.class

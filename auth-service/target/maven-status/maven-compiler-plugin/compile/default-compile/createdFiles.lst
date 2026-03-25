@@ -1,0 +1,14 @@
+com\local\taskboard\service\UserAccountService.class
+com\local\taskboard\controller\UserAccountController.class
+com\local\taskboard\repository\UserAccountRepository.class
+com\local\taskboard\AuthServiceApplication.class
+com\local\taskboard\controller\UserAccountController$LoginRequest.class
+com\local\taskboard\domain\UserAccount$UserAccountBuilder.class
+com\local\taskboard\controller\UserAccountController$RegisterRequest.class
+com\local\taskboard\controller\HealthController.class
+com\local\taskboard\service\UserDetailService.class
+com\local\taskboard\configuration\SecurityConfig.class
+com\local\taskboard\domain\UserAccount.class
+com\local\taskboard\configuration\JwtAuthenticationFilter.class
+com\local\taskboard\controller\UserAccountController$TokenResponse.class
+com\local\taskboard\service\JwtService.class
