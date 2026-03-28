@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: project-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/taskboard
+
+services:
+  auth:
+    base-url: http://localhost:8081
+
+server:
+  port: 8082
+
+security:
+  jwt:
+    secret: c3VwZXItc2VjcmV0LWtleS10aGF0LWlzLWF0LWxlYXN0LTMyLWJ5dGVz
+    expiration-seconds: 3600
