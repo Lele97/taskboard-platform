@@ -1,3 +1,6 @@
 /.idea/
 /target/
 /.vscode/
+test_output.txt
+register.json
+token_req.json

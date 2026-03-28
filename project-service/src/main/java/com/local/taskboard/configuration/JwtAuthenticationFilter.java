@@ -37,8 +37,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        jwt = authHeader.substring(7);
-        username = jwtService.extractUsername(jwt);
+        jwt = authHeader.substring(7).trim();
+
+        if (jwt.isEmpty()) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        try {
+            username = jwtService.extractUsername(jwt);
+        } catch (Exception e) {
+            // Token malformato o non valido – lo si tratta come non autenticato
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // Nota: chiamiamo l'Auth Service passandogli l'header completo "Bearer <token>"

@@ -13,11 +13,9 @@ public class CardService {
 
     private final CardRepository cardRepository;
 
-
     public CardService(CardRepository cardRepository) {
         this.cardRepository = cardRepository;
     }
-
 
     public List<Card> findByBoardIdAndColumn(String boardId, String column) {
         return cardRepository.findByBoardIdAndColumn(boardId, column);

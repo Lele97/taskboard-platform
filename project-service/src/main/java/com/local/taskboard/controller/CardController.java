@@ -44,7 +44,7 @@ public class CardController {
         return ResponseEntity.ok(saved);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Card> updateCard(@PathVariable String id,
                                            @RequestBody Card request) {
         return cardService.updateCard(id, request)
@@ -57,5 +57,4 @@ public class CardController {
         cardService.deleteCard(id);
         return ResponseEntity.noContent().build();
     }
-
 }
