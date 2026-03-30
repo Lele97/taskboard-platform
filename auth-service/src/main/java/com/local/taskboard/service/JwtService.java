@@ -14,6 +14,24 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Service class for handling JWT (JSON Web Token) operations in the
+ * authentication service.
+ * This service is responsible for generating, validating, and extracting
+ * information from JWT tokens.
+ *
+ * <p>
+ * It provides methods for:
+ * <ul>
+ * <li>Generating JWT tokens with expiration</li>
+ * <li>Extracting username from tokens</li>
+ * <li>Validating token authenticity and ownership</li>
+ * </ul>
+ *
+ * @author TaskBoard Platform Team
+ * @version 1.0
+ * @since 1.0
+ */
 @Service
 public class JwtService {
 

@@ -15,6 +15,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Security configuration class for the authentication service.
+ * This class configures Spring Security settings including:
+ * <ul>
+ * <li>JWT authentication filter integration</li>
+ * <li>Password encoding</li>
+ * <li>HTTP security rules and CORS configuration</li>
+ * <li>Session management policy (stateless for JWT)</li>
+ * </ul>
+ *
+ * <p>
+ * The configuration permits unrestricted access to authentication endpoints
+ * (/auth/register, /auth/token) while requiring authentication for all other
+ * endpoints.
+ * OPTIONS requests are permitted for all paths to support CORS preflight
+ * requests.
+ *
+ * @author TaskBoard Platform Team
+ * @version 1.0
+ * @since 1.0
+ */
 @Configuration
 public class SecurityConfig {
 
@@ -33,8 +54,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/register", "/auth/token").permitAll()
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults());
 
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -46,7 +66,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {

@@ -11,6 +11,25 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import java.time.Instant;
 import java.util.List;
 
+/**
+ * Entity class representing a card in the TaskBoard platform.
+ * A card represents an individual task or item within a board, organized in
+ * columns.
+ * 
+ * <p>
+ * This class maps to the "cards" collection in MongoDB and contains
+ * information about a card including its board association, column, title,
+ * description,
+ * assignee, labels, due date, and timestamps.
+ * 
+ * <p>
+ * Note: Currently columns are represented as strings, but in the future
+ * a separate Column entity may be modeled.
+ * 
+ * @author TaskBoard Platform Team
+ * @version 1.0
+ * @since 1.0
+ */
 @Document(collection = "cards")
 @Data
 @NoArgsConstructor
@@ -24,11 +43,11 @@ public class Card {
     @Indexed
     private String boardId;
 
-    // in seguito potremo modellare una entity separata "Column"
     @Indexed
-    private String column; // es. "TODO", "IN_PROGRESS", "DONE"
+    private String column;
 
     private String title;
+
     private String description;
 
     private String assigneeUserId;
@@ -38,5 +57,6 @@ public class Card {
     private Instant dueDate;
 
     private Instant createdAt;
+
     private Instant updatedAt;
 }

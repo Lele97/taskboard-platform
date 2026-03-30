@@ -14,6 +14,24 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
+/**
+ * REST controller for handling user account operations in the authentication
+ * service.
+ * This controller manages user registration, authentication, and token
+ * generation.
+ *
+ * <p>
+ * It provides endpoints for:
+ * <ul>
+ * <li>User registration (/register)</li>
+ * <li>JWT token generation (/token)</li>
+ * <li>Authenticated user information retrieval (/user_authenticated)</li>
+ * </ul>
+ *
+ * @author TaskBoard Platform Team
+ * @version 1.0
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/auth")
 public class UserAccountController {
@@ -30,7 +48,8 @@ public class UserAccountController {
             @NotBlank String password) {
     }
 
-    public record UserInfoResponse(String username, Set<String> roles) {}
+    public record UserInfoResponse(String username, Set<String> roles) {
+    }
 
     public record TokenResponse(String token) {
     }

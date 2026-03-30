@@ -9,6 +9,23 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Service class for managing user account operations in the authentication
+ * service.
+ * This service handles user registration, lookup, and management operations.
+ *
+ * <p>
+ * It provides methods for:
+ * <ul>
+ * <li>Finding users by username</li>
+ * <li>Checking if a username already exists</li>
+ * <li>Registering new users with encoded passwords</li>
+ * </ul>
+ *
+ * @author TaskBoard Platform Team
+ * @version 1.0
+ * @since 1.0
+ */
 @Service
 public class UserAccountService {
 

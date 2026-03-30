@@ -13,6 +13,26 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Security configuration for the Project Service.
+ * This class configures Spring Security for the project service, setting up
+ * JWT-based authentication and defining access control rules for different
+ * endpoints.
+ *
+ * <p>
+ * The configuration includes:
+ * <ul>
+ * <li>Disabling CSRF protection as the service is stateless</li>
+ * <li>Setting session management to stateless</li>
+ * <li>Configuring permit rules for public endpoints</li>
+ * <li>Adding JWT authentication filter before
+ * UsernamePasswordAuthenticationFilter</li>
+ * </ul>
+ *
+ * @author TaskBoard Platform Team
+ * @version 1.0
+ * @since 1.0
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

@@ -10,6 +10,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
+/**
+ * Service class for loading user details in the authentication service.
+ * This service implements Spring Security's UserDetailsService to load
+ * user-specific data.
+ *
+ * <p>
+ * It provides the {@link #loadUserByUsername(String)} method which retrieves
+ * user information
+ * from the database and converts it to a Spring Security User object with
+ * appropriate authorities.
+ *
+ * @author TaskBoard Platform Team
+ * @version 1.0
+ * @since 1.0
+ */
 @Service
 public class UserDetailService implements UserDetailsService {
 
@@ -19,10 +34,10 @@ public class UserDetailService implements UserDetailsService {
         this.userAccountRepository = userAccountRepository;
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userAccountRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        var user = userAccountRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         var authorities = user.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
         return new User(user.getUsername(), user.getPassword(), authorities);
