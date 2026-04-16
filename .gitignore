@@ -4,3 +4,7 @@
 test_output.txt
 register.json
 token_req.json
+/analytics-service/target/
+/auth-service/target/
+/gateway-service/target/
+/project-service/target/

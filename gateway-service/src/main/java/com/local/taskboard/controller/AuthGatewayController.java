@@ -1,6 +1,5 @@
 package com.local.taskboard.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +11,6 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import com.local.taskboard.exception.BadCredentialsException;
-import com.local.taskboard.exception.UsernameNotFoundException;
 import reactor.core.publisher.Mono;
 
 /**
@@ -73,23 +71,5 @@ public class AuthGatewayController {
                 .retrieve()
                 .toEntity(String.class)
                 .onErrorMap(WebClientResponseException.class, ex -> new BadCredentialsException(ex.getMessage()));
-        // .onErrorMap(WebClientResponseException.class, ex -> {
-        // if (ex.getStatusCode() == HttpStatus.UNAUTHORIZED || ex.getStatusCode() ==
-        // HttpStatus.BAD_REQUEST || ex.getStatusCode() == HttpStatus.FORBIDDEN) {
-        // String responseBody = ex.getResponseBodyAsString().toLowerCase();
-        // if (responseBody.contains("user not found") ||
-        // responseBody.contains("usernamenotfound") || responseBody.contains("invalid
-        // credentials") || responseBody.contains("bad credentials")) {
-        // if (responseBody.contains("user not found") ||
-        // responseBody.contains("usernamenotfound")) {
-        // return new UsernameNotFoundException("User not found");
-        // }
-        // return new BadCredentialsException("Bad Credentials");
-        // }
-        // // try to match specific messages exactly as expected for bad login
-        // return new BadCredentialsException("Bad Credentials");
-        // }
-        // return ex;
-        // });
     }
 }

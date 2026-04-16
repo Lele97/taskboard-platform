@@ -1,5 +1,6 @@
 package com.local.taskboard.configuration;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +45,13 @@ public class WebClientConfig {
             @Value("${services.project.base-url}") String projectBaseUrl) {
         return WebClient.builder()
                 .baseUrl(projectBaseUrl)
+                .build();
+    }
+
+    @Bean
+    public WebClient analyticsWebClient(@Value("${services.analytics.base-url}") String analyticsBaseUrl) {
+        return WebClient.builder()
+                .baseUrl(analyticsBaseUrl)
                 .build();
     }
 }

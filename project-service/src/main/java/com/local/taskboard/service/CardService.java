@@ -65,25 +65,25 @@ public class CardService {
         return cardRepository.findByBoardId(boardId);
     }
 
-    public Optional<Card> updateCard(String id, CardController.CardRequest request) {
+    public Optional<Card> updateCard(String id, Card request) {
         return cardRepository.findById(id).map(existing -> {
-            if (request.title() != null) {
-                existing.setTitle(request.title());
+            if (request.getTitle() != null) {
+                existing.setTitle(request.getTitle());
             }
-            if (request.description() != null) {
-                existing.setDescription(request.description());
+            if (request.getDescription() != null) {
+                existing.setDescription(request.getDescription());
             }
-            if (request.column() != null) {
-                existing.setColumn(request.column());
+            if (request.getColumn() != null) {
+                existing.setColumn(request.getColumn());
             }
-            if (request.assigneeUserId() != null) {
-                existing.setAssigneeUserId(request.assigneeUserId());
+            if (request.getAssigneeUserId() != null) {
+                existing.setAssigneeUserId(request.getAssigneeUserId());
             }
-            if (request.labels() != null) {
-                existing.setLabels(request.labels());
+            if (request.getLabels() != null) {
+                existing.setLabels(request.getLabels());
             }
-            if (request.dueDate() != null) {
-                existing.setDueDate(request.dueDate());
+            if (request.getDueDate() != null) {
+                existing.setDueDate(request.getDueDate());
             }
             existing.setUpdatedAt(Instant.now());
             return cardRepository.save(existing);

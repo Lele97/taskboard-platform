@@ -74,7 +74,7 @@ public class CardController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Card> updateCard(@PathVariable String id,
-            @Valid @RequestBody CardRequest request) {
+             @RequestBody Card request) {
         return cardService.updateCard(id, request)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

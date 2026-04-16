@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.support.WebExchangeBindException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebExceptionHandler;
 import reactor.core.publisher.Mono;
@@ -16,7 +17,7 @@ import reactor.core.publisher.Mono;
 import java.util.stream.Collectors;
 
 @Component
-@Order(-1)
+@Order(-2)
 public class GatewayErrorWebExceptionHandler implements WebExceptionHandler {
 
     private final ObjectMapper objectMapper;
@@ -44,6 +45,15 @@ public class GatewayErrorWebExceptionHandler implements WebExceptionHandler {
         } else if (ex instanceof UsernameNotFoundException || ex instanceof BadCredentialsException) {
             status = HttpStatus.UNAUTHORIZED;
             apiError = ResponseApiError.of(401, "Unauthorized", ex.getMessage());
+
+        } else if (ex instanceof WebClientResponseException wcEx) {
+            status = HttpStatus.resolve(wcEx.getStatusCode().value());
+            if (status == null) status = HttpStatus.BAD_GATEWAY;
+            apiError = ResponseApiError.of(
+                    status.value(),
+                    status.getReasonPhrase(),
+                    wcEx.getResponseBodyAsString()
+            );
 
         } else if (ex instanceof RuntimeException) {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
