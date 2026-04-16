@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.local.taskboard.AuthIntegrationTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.930 s -- in com.local.taskboard.AuthIntegrationTest
