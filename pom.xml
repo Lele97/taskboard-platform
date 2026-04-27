@@ -17,7 +17,6 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
-
     <!-- Usiamo il parent di Spring Boot per gestire versioni dipendenze -->
     <parent>
         <groupId>org.springframework.boot</groupId>

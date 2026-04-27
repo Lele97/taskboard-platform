@@ -1,6 +1,6 @@
 package com.local.taskboard.service;
 
-import com.local.taskboard.controller.CardController;
+import com.local.taskboard.controller.ProjectController;
 import com.local.taskboard.domain.Card;
 import com.local.taskboard.repository.CardRepository;
 import org.springframework.stereotype.Service;
@@ -14,13 +14,13 @@ import java.util.Optional;
  * This service provides business logic for creating, retrieving, updating, and
  * deleting cards
  * which represent individual tasks or items within boards.
- * 
+ *
  * <p>
  * The service acts as an intermediary between the CardController and
  * CardRepository,
  * handling the business logic and data transformations required for card
  * operations.
- * 
+ *
  * @author TaskBoard Platform Team
  * @version 1.0
  * @since 1.0
@@ -46,7 +46,7 @@ public class CardService {
         return cardRepository.findById(id);
     }
 
-    public Card save(CardController.CardRequest card) {
+    public Card save(ProjectController.CardRequest card) {
         Card savedCard = Card.builder()
                 .boardId(card.boardId())
                 .column(card.column())

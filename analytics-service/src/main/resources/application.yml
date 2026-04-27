@@ -8,7 +8,6 @@ spring:
     exclude:
       - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
 
-
 server:
   port: 8083
 

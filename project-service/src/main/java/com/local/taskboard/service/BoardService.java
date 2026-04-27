@@ -1,6 +1,6 @@
 package com.local.taskboard.service;
 
-import com.local.taskboard.controller.BoardController;
+import com.local.taskboard.controller.ProjectController;
 import com.local.taskboard.domain.Board;
 import com.local.taskboard.repository.BoardRepository;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
-    public Board save(BoardController.BoardRequest board) {
+    public Board save(ProjectController.BoardRequest board) {
         Board savedBoard = Board.builder()
                 .name(board.name())
                 .description(board.description())
