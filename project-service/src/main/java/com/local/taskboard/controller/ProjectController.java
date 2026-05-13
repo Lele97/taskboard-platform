@@ -14,7 +14,7 @@ import java.time.Instant;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/project")
+@RequestMapping("/api/projects")
 public class ProjectController {
 
     private final BoardService boardService;
@@ -37,7 +37,7 @@ public class ProjectController {
         return boardService.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/boards/{id}")
     public ResponseEntity<Board> findOne(@PathVariable String id) {
         return boardService.findById(id).map(resp -> ResponseEntity.ok().body(resp))
                 .orElse(ResponseEntity.notFound().build());
@@ -62,14 +62,14 @@ public class ProjectController {
         return cardService.findByBoardId(boardId);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/cards/{id}")
     public ResponseEntity<Card> getCardById(@PathVariable String id) {
         return cardService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/boards")
+    @PostMapping("/cards")
     public ResponseEntity<Card> createCard(@Valid @RequestBody ProjectController.CardRequest request) {
         Card saved = cardService.save(request);
         return ResponseEntity.ok(saved);

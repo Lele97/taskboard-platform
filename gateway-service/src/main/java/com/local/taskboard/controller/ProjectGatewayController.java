@@ -79,7 +79,7 @@ public class ProjectGatewayController {
 
         }
 
-        @GetMapping("/cards/board/{boardId}")
+        @GetMapping("/board/{boardId}")
         public Mono<ResponseEntity<String>> getCardsByBoard(
                         @RequestHeader(value = "Authorization", required = false) String authHeader,
                         @PathVariable String boardId,
@@ -87,7 +87,7 @@ public class ProjectGatewayController {
 
                 return projectWebClient.get()
                                 .uri(uriBuilder -> uriBuilder
-                                                .path("/api/projects/cards/board/{boardId}")
+                                        .path("/api/projects/board/{boardId}")
                                                 .queryParamIfPresent("column", java.util.Optional.ofNullable(column))
                                                 .build(boardId))
                                 .header("Authorization", authHeader != null ? authHeader : "")
@@ -110,7 +110,7 @@ public class ProjectGatewayController {
                                 .toEntity(String.class);
         }
 
-        @DeleteMapping(value = "/cards/{id}")
+        @DeleteMapping(value = "/{id}")
         public Mono<ResponseEntity<String>> deleteCard(
                         @RequestHeader(value = "Authorization", required = false) String authHeader,
                         @PathVariable String id) {
@@ -121,7 +121,7 @@ public class ProjectGatewayController {
                                 .toEntity(String.class);
         }
 
-        @PutMapping(value = "/cards/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+        @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
         public Mono<ResponseEntity<String>> updateCard(
                         @RequestHeader(value = "Authorization", required = false) String authHeader,
                         @PathVariable String id, @RequestBody String body) {
