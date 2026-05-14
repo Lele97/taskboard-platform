@@ -1,0 +1,96 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: taskboard-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - taskboard-network
+
+  gateway-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: gateway-runtime
+    container_name: gateway-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVICES_AUTH_BASE_URL=http://auth-service:8081
+      - SERVICES_PROJECT_BASE_URL=http://project-service:8082
+      - SERVICES_ANALYTICS_BASE_URL=http://analytics-service:8083
+    networks:
+      - taskboard-network
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: auth-runtime
+    container_name: auth-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/taskboard-auth
+    depends_on:
+      - mongodb
+    networks:
+      - taskboard-network
+
+  project-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: project-runtime
+    container_name: project-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/taskboard-project
+      - SPRING-AUTH-URI=http://localhost:8081
+    depends_on:
+      - mongodb
+    networks:
+      - taskboard-network
+
+  analytics-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: analytics-runtime
+    container_name: analytics-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/taskboard-project
+      - SPRING-AUTH-URI=http://localhost:8081
+    depends_on:
+      - mongodb
+    networks:
+      - taskboard-network
+
+  prometheus:
+    image: prom/prometheus:v2.44.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - .//grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+networks:
+  taskboard-network:
+    driver: bridge
+    name: taskboard-network
+
+volumes:
+  mongo-data:

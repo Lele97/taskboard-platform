@@ -38,6 +38,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    private final String[] AUTH_WHITE_LIST = {
+            "/auth/register",
+            "/auth/token",
+            "/actuator",
+            "/actuator/prometheus",
+            "/actuator/health",
+            "/actuator/info"};
+
     private final JwtAuthenticationFilter jwtAuthFilter;
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
@@ -52,7 +60,7 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth/register", "/auth/token").permitAll()
+                        .requestMatchers(AUTH_WHITE_LIST).permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults());
 

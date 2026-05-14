@@ -43,14 +43,9 @@ public class ProjectController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("boards")
+    @PostMapping("/boards")
     public ResponseEntity<Board> save(@Valid @RequestBody ProjectController.BoardRequest board) {
         return new ResponseEntity<>(boardService.save(board), HttpStatus.OK);
-    }
-
-    @GetMapping("/cards")
-    public ResponseEntity<List<Card>> findAllCards() {
-        return ResponseEntity.ok(cardService.findAll());
     }
 
     @GetMapping("/board/{boardId}")
@@ -60,13 +55,6 @@ public class ProjectController {
             return cardService.findByBoardIdAndColumn(boardId, column);
         }
         return cardService.findByBoardId(boardId);
-    }
-
-    @GetMapping("/cards/{id}")
-    public ResponseEntity<Card> getCardById(@PathVariable String id) {
-        return cardService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/cards")

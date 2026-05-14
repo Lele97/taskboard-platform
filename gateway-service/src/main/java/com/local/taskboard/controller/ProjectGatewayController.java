@@ -4,7 +4,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 /**
@@ -115,7 +114,7 @@ public class ProjectGatewayController {
                         @RequestHeader(value = "Authorization", required = false) String authHeader,
                         @PathVariable String id) {
                 return projectWebClient.delete()
-                                .uri(uriBuilder -> uriBuilder.path("/api/projects/cards/{id}").build(id))
+                        .uri(uriBuilder -> uriBuilder.path("/api/projects/{id}").build(id))
                                 .header("Authorization", authHeader != null ? authHeader : "")
                                 .retrieve()
                                 .toEntity(String.class);
@@ -126,37 +125,11 @@ public class ProjectGatewayController {
                         @RequestHeader(value = "Authorization", required = false) String authHeader,
                         @PathVariable String id, @RequestBody String body) {
 
-                return projectWebClient.put().uri(uriBuilder -> uriBuilder.path("/api/projects/cards/{id}").build(id))
+            return projectWebClient.put().uri(uriBuilder -> uriBuilder.path("/api/projects/{id}").build(id))
                                 .header("Authorization", authHeader != null ? authHeader : "")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .bodyValue(body)
                                 .retrieve()
                                 .toEntity(String.class);
-        }
-
-        @GetMapping("/cards/{id}")
-        public Mono<ResponseEntity<String>> getCardById(
-                        @RequestHeader(value = "Authorization", required = false) String authHeader,
-                        @PathVariable String id) {
-
-                return projectWebClient.get().uri(uriBuilder -> uriBuilder.path("/api/projects/cards/{id}").build(id))
-                                .header("Authorization", authHeader != null ? authHeader : "")
-                                .retrieve()
-                                .toEntity(String.class);
-        }
-
-        @GetMapping("/cards")
-        public Mono<ResponseEntity<String>> getCards(
-                        @RequestHeader(value = "Authorization", required = false) String authHeader) {
-
-                return projectWebClient.get()
-                                .uri("/api/projects/cards")
-                                .header("Authorization", authHeader != null ? authHeader : "")
-                                .retrieve()
-                                .toEntity(String.class)
-                                .onErrorResume(WebClientResponseException.class,
-                                                ex -> Mono.just(ResponseEntity.status(ex.getStatusCode())
-                                                                .contentType(MediaType.APPLICATION_JSON)
-                                                                .body(ex.getResponseBodyAsString())));
         }
 }
