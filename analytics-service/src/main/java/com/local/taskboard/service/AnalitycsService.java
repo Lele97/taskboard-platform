@@ -22,10 +22,29 @@ public class AnalitycsService {
 
         if(mongoTemplate.count(
                 new org.springframework.data.mongodb.core.query.Query(
-                        Criteria.where("boardId").is(new org.bson.BsonString(boardId))
+                        Criteria.where("boardId").is(boardId)
                 ), "cards")==0){
-            log.warn("La board con id: {} non esiste", boardId);
-            throw new Exception("La board con id: " + boardId + " non esiste");
+            log.warn("La board con id: {} non ha cards", boardId);
+            BoardAnalytics emptyAnalytics = new BoardAnalytics();
+            emptyAnalytics.setBoardId(boardId);
+            emptyAnalytics.setTotalCards(0);
+            emptyAnalytics.setTodoCount(0);
+            emptyAnalytics.setInProgressCount(0);
+            emptyAnalytics.setDoneCount(0);
+            emptyAnalytics.setCompletionRate(0.0);
+            
+            try {
+                Document boardDoc = mongoTemplate.findById(new org.bson.types.ObjectId(boardId), Document.class, "board");
+                if (boardDoc != null && boardDoc.getString("name") != null) {
+                    emptyAnalytics.setBoardName(boardDoc.getString("name"));
+                } else {
+                    emptyAnalytics.setBoardName("Unknown");
+                }
+            } catch (Exception e) {
+                emptyAnalytics.setBoardName("Unknown");
+            }
+            
+            return emptyAnalytics;
         }
 
         MatchOperation matchBoard = Aggregation.match(Criteria.where("boardId").is(boardId));
@@ -105,7 +124,7 @@ public class AnalitycsService {
 
     if(mongoTemplate.count(new org.springframework.data.mongodb.core.query.Query(),"cards")==0){
         log.warn("Non esistono cards");
-        throw new Exception("Non esistono cards");
+        return new ArrayList<>();
     }
 
     // Stage 1: group by compound key {boardId, column}
