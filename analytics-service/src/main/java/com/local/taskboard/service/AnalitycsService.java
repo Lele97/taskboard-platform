@@ -5,11 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.*;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -20,10 +26,10 @@ public class AnalitycsService {
 
     public BoardAnalytics getBoardAnalyticsById(String boardId) throws Exception {
 
-        if(mongoTemplate.count(
+        if (mongoTemplate.count(
                 new org.springframework.data.mongodb.core.query.Query(
                         Criteria.where("boardId").is(boardId)
-                ), "cards")==0){
+                ), "cards") == 0) {
             log.warn("La board con id: {} non ha cards", boardId);
             BoardAnalytics emptyAnalytics = new BoardAnalytics();
             emptyAnalytics.setBoardId(boardId);
@@ -32,7 +38,7 @@ public class AnalitycsService {
             emptyAnalytics.setInProgressCount(0);
             emptyAnalytics.setDoneCount(0);
             emptyAnalytics.setCompletionRate(0.0);
-            
+
             try {
                 Document boardDoc = mongoTemplate.findById(new org.bson.types.ObjectId(boardId), Document.class, "board");
                 if (boardDoc != null && boardDoc.getString("name") != null) {
@@ -43,7 +49,7 @@ public class AnalitycsService {
             } catch (Exception e) {
                 emptyAnalytics.setBoardName("Unknown");
             }
-            
+
             return emptyAnalytics;
         }
 
@@ -58,7 +64,7 @@ public class AnalitycsService {
                 .append("let", new Document("boardIdStr", "$boardId"))
                 .append("pipeline", List.of(
                         new Document("$match", new Document("$expr",
-                                new Document("$eq", List.of("$_id",new Document("$toObjectId", "$$boardIdStr")))
+                                new Document("$eq", List.of("$_id", new Document("$toObjectId", "$$boardIdStr")))
                         )),
                         new Document("$project", new Document("name", 1))
                 ))
@@ -72,7 +78,7 @@ public class AnalitycsService {
                 )
         );
 
-        Aggregation aggregation = Aggregation.newAggregation(matchBoard, groupByColumn , context ->  lookupStage, context -> addFieldsStage);
+        Aggregation aggregation = Aggregation.newAggregation(matchBoard, groupByColumn, context -> lookupStage, context -> addFieldsStage);
 
         AggregationResults<Document> results = mongoTemplate.aggregate(
                 aggregation, "cards", Document.class
@@ -95,11 +101,11 @@ public class AnalitycsService {
 
             int count = toInt(stat.get("count"));
 
-            if(column != null){
+            if (column != null) {
                 switch (column) {
-                    case "TODO"        -> analytics.setTodoCount(count);
+                    case "TODO" -> analytics.setTodoCount(count);
                     case "IN_PROGRESS" -> analytics.setInProgressCount(count);
-                    case "DONE"        -> analytics.setDoneCount(count);
+                    case "DONE" -> analytics.setDoneCount(count);
                 }
             }
 
@@ -119,24 +125,24 @@ public class AnalitycsService {
         return value instanceof Number n ? n.intValue() : 0;
     }
 
-    public List<BoardAnalytics> getBoardAnalytics() throws Exception {
+    public List<BoardAnalytics> getBoardAnalytics() {
 
 
-    if(mongoTemplate.count(new org.springframework.data.mongodb.core.query.Query(),"cards")==0){
-        log.warn("Non esistono cards");
-        return new ArrayList<>();
-    }
+        if (mongoTemplate.count(new org.springframework.data.mongodb.core.query.Query(), "cards") == 0) {
+            log.warn("Non esistono cards");
+            return new ArrayList<>();
+        }
 
-    // Stage 1: group by compound key {boardId, column}
-    GroupOperation groupByBoardAndColumn = Aggregation.group("boardId", "column")
-            .count().as("count");
+        // Stage 1: group by compound key {boardId, column}
+        GroupOperation groupByBoardAndColumn = Aggregation.group("boardId", "column")
+                .count().as("count");
 
         Document lookupStage = new Document("$lookup", new Document()
                 .append("from", "board")
                 .append("let", new Document("boardIdStr", "$_id.boardId"))
                 .append("pipeline", List.of(
                         new Document("$match", new Document("$expr",
-                                new Document("$eq", List.of("$_id",new Document("$toObjectId", "$$boardIdStr")))
+                                new Document("$eq", List.of("$_id", new Document("$toObjectId", "$$boardIdStr")))
                         )),
                         new Document("$project", new Document("name", 1))
                 ))
@@ -150,58 +156,58 @@ public class AnalitycsService {
                 )
         );
 
-    Aggregation aggregation = Aggregation.newAggregation(groupByBoardAndColumn, context ->  lookupStage, context -> addFieldsStage);
+        Aggregation aggregation = Aggregation.newAggregation(groupByBoardAndColumn, context -> lookupStage, context -> addFieldsStage);
 
-    AggregationResults<Document> results = mongoTemplate.aggregate(
-            aggregation, "cards", Document.class
-    );
+        AggregationResults<Document> results = mongoTemplate.aggregate(
+                aggregation, "cards", Document.class
+        );
 
-    // Stage 2: build per-board analytics in Java
-    Map<String, BoardAnalytics> analyticsMap = new LinkedHashMap<>();
+        // Stage 2: build per-board analytics in Java
+        Map<String, BoardAnalytics> analyticsMap = new LinkedHashMap<>();
 
-    results.getMappedResults().forEach(doc -> {
-        // compound _id is a nested Document: { boardId: "...", column: "..." }
-        Document id = (Document) doc.get("_id");
-        if (id == null) return;
+        results.getMappedResults().forEach(doc -> {
+            // compound _id is a nested Document: { boardId: "...", column: "..." }
+            Document id = (Document) doc.get("_id");
+            if (id == null) return;
 
-        String boardId = id.getString("boardId");
-        String column  = id.getString("column");
-        String boardName = doc.getString("boardName"); // ✅ aggiungi questa riga
-        int count      = toInt(doc.get("count"));
+            String boardId = id.getString("boardId");
+            String column = id.getString("column");
+            String boardName = doc.getString("boardName"); // ✅ aggiungi questa riga
+            int count = toInt(doc.get("count"));
 
-        if (boardId == null) return;
+            if (boardId == null) return;
 
 
-        BoardAnalytics analytics = analyticsMap.computeIfAbsent(boardId, k -> {
-            BoardAnalytics a = new BoardAnalytics();
-            a.setBoardId(k);
-            a.setTotalCards(0);
-            return a;
+            BoardAnalytics analytics = analyticsMap.computeIfAbsent(boardId, k -> {
+                BoardAnalytics a = new BoardAnalytics();
+                a.setBoardId(k);
+                a.setTotalCards(0);
+                return a;
+            });
+
+            if (boardName != null) analytics.setBoardName(boardName); // ✅ setta il nome
+
+
+            analytics.setTotalCards(analytics.getTotalCards() + count);
+
+            if (column != null) {
+                switch (column) {
+                    case "TODO" -> analytics.setTodoCount(count);
+                    case "IN_PROGRESS" -> analytics.setInProgressCount(count);
+                    case "DONE" -> analytics.setDoneCount(count);
+                }
+            }
         });
 
-        if (boardName != null) analytics.setBoardName(boardName); // ✅ setta il nome
+        // Compute completion rate per board
+        analyticsMap.values().forEach(a ->
+                a.setCompletionRate(
+                        a.getTotalCards() > 0
+                                ? (double) a.getDoneCount() / a.getTotalCards() * 100
+                                : 0
+                )
+        );
 
-
-        analytics.setTotalCards(analytics.getTotalCards() + count);
-
-        if (column != null) {
-            switch (column) {
-                case "TODO"        -> analytics.setTodoCount(count);
-                case "IN_PROGRESS" -> analytics.setInProgressCount(count);
-                case "DONE"        -> analytics.setDoneCount(count);
-            }
-        }
-    });
-
-    // Compute completion rate per board
-    analyticsMap.values().forEach(a ->
-            a.setCompletionRate(
-            a.getTotalCards() > 0
-            ? (double) a.getDoneCount() / a.getTotalCards() * 100
-            : 0
-            )
-            );
-
-    return new ArrayList<>(analyticsMap.values());
-}
+        return new ArrayList<>(analyticsMap.values());
+    }
 }

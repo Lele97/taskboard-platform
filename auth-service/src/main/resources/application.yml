@@ -3,7 +3,7 @@ spring:
         name: auth-service
     data:
       mongodb:
-        uri: { SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/taskboard-auth }
+          uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/taskboard-auth}
 
 server:
     port: 8081

@@ -7,11 +7,11 @@ server:
 
 services:
   auth:
-    base-url: { SERVICES_AUTH_BASE_URL:http://localhost:8081 }
+    base-url: ${SERVICES_AUTH_BASE_URL:http://localhost:8081}
   project:
-    base-url: { SERVICES_PROJECT_BASE_URL:http://localhost:8082 }
+    base-url: ${SERVICES_PROJECT_BASE_URL:http://localhost:8082}
   analytics:
-    base-url: { SERVICES_ANALYTI:http://localhost:8083 }
+    base-url: ${SERVICES_ANALYTI:http://localhost:8083}
 
 management:
   info:
