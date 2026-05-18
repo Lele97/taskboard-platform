@@ -7,6 +7,7 @@ import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Configuration class for Cross-Origin Resource Sharing (CORS) settings.
@@ -14,7 +15,7 @@ import java.util.Arrays;
  * cross-origin requests from the frontend application.
  *
  * <p>
- * The configuration permits requests from http://localhost:4200 (Angular
+ * The configuration permits requests from 127.0.0.0 (localhost) (Angular
  * frontend)
  * with all HTTP methods (GET, POST, PUT, DELETE, OPTIONS) and headers.
  * Credentials are allowed, and the preflight response is cached for 1 hour.
@@ -29,10 +30,13 @@ public class CorsConfig {
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        corsConfig.setAllowedOriginPatterns(List.of(
+                "http://localhost:[*]",
+                "https://localhost:[*]"
+        ));
         corsConfig.setMaxAge(3600L);
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        corsConfig.setAllowedHeaders(Arrays.asList("*"));
+        corsConfig.setAllowedHeaders(List.of("*"));
         corsConfig.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
