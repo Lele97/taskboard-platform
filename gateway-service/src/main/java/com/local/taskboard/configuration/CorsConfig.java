@@ -32,7 +32,9 @@ public class CorsConfig {
         CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.setAllowedOriginPatterns(List.of(
                 "http://localhost:[*]",
-                "https://localhost:[*]"
+                "https://localhost:[*]",
+                "http://127.0.0.1:[*]",
+                "https://127.0.0.1:[*]"
         ));
         corsConfig.setMaxAge(3600L);
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
